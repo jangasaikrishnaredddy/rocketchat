@@ -20,8 +20,11 @@ import {
 } from '../../../../components/Contextualbar';
 import { VirtuosoScrollbars } from '../../../../components/CustomScrollbars';
 import InfiniteListAnchor from '../../../../components/InfiniteListAnchor';
+import { useRoomRolesEndpoint } from '../../../../hooks/useRoomRolesEndpoint';
 
-type RoomMemberUser = Pick<IUser, 'username' | '_id' | 'name' | 'status' | 'freeSwitchExtension'>;
+type RoomMemberUser = Pick<IUser, 'username' | '_id' | 'name' | 'status' | 'freeSwitchExtension'> & {
+	roles: string[];
+};
 
 type RoomMembersProps = {
 	rid: IRoom['_id'];
@@ -86,6 +89,15 @@ const RoomMembers = ({
 
 	const useRealName = useSetting('UI_Use_Real_Name', false);
 
+	const rolesToFetch = ['admin', 'moderator', 'owner'];
+	const rolesResult = useRoomRolesEndpoint(rid, rolesToFetch);
+	const roles = rolesResult.data ?? [];
+	const membersWithRoles = members.map((member) => ({
+		...member,
+		// @ts-ignore
+		roles: roles[member._id] || [],
+	}));
+
 	return (
 		<>
 			<ContextualbarHeader data-qa-id='RoomHeader-Members'>
@@ -136,7 +148,7 @@ const RoomMembers = ({
 								}}
 								totalCount={total}
 								overscan={50}
-								data={members}
+								data={membersWithRoles}
 								// eslint-disable-next-line react/no-multi-comp
 								components={{ Scroller: VirtuosoScrollbars, Footer: () => <InfiniteListAnchor loadMore={loadMoreMembers} /> }}
 								itemContent={(index, data): ReactElement => (
