@@ -13,6 +13,18 @@ type RoomContextValue = {
 	hasMorePreviousMessages: boolean;
 	hasMoreNextMessages: boolean;
 	isLoadingMoreMessages: boolean;
+	roles: {
+		_id: string;
+		name?: string;
+		username?: string;
+		emails?: {
+			address: string;
+			verified?: boolean;
+		}[];
+		avatarETag?: string;
+		createdAt: string;
+		roles: string[];
+	}[];
 };
 
 export const RoomContext = createContext<RoomContextValue | null>(null);

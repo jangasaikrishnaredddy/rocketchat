@@ -15,6 +15,7 @@ import { RoomHistoryManager } from '../../../../app/ui-utils/client';
 import { useReactiveQuery } from '../../../hooks/useReactiveQuery';
 import { useReactiveValue } from '../../../hooks/useReactiveValue';
 import { useRoomInfoEndpoint } from '../../../hooks/useRoomInfoEndpoint';
+import { useRoomRolesEndpoint } from '../../../hooks/useRoomRolesEndpoint';
 import { useSidePanelNavigation } from '../../../hooks/useSidePanelNavigation';
 import { RoomManager } from '../../../lib/RoomManager';
 import { subscriptionsQueryKeys } from '../../../lib/queryKeys';
@@ -37,6 +38,10 @@ const RoomProvider = ({ rid, children }: RoomProviderProps): ReactElement => {
 	const resultFromServer = useRoomInfoEndpoint(rid);
 
 	const resultFromLocal = useRoomQuery(rid);
+
+	const rolesToFetch = ['admin', 'moderator', 'owner'];
+	const rolesResult = useRoomRolesEndpoint(rid, rolesToFetch);
+	const roles = rolesResult.data ?? [];
 
 	// TODO: the following effect is a workaround while we don't have a general and definitive solution for it
 	const router = useRouter();
@@ -90,8 +95,9 @@ const RoomProvider = ({ rid, children }: RoomProviderProps): ReactElement => {
 			hasMorePreviousMessages,
 			hasMoreNextMessages,
 			isLoadingMoreMessages,
+			roles,
 		};
-	}, [hasMoreNextMessages, hasMorePreviousMessages, isLoadingMoreMessages, pseudoRoom, rid, subscriptionQuery.data]);
+	}, [hasMoreNextMessages, hasMorePreviousMessages, isLoadingMoreMessages, pseudoRoom, rid, subscriptionQuery.data, rolesResult.data]);
 
 	const isSidepanelFeatureEnabled = useSidePanelNavigation();
 
