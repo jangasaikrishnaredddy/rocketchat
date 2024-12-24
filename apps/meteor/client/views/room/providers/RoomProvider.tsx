@@ -39,9 +39,26 @@ const RoomProvider = ({ rid, children }: RoomProviderProps): ReactElement => {
 
 	const resultFromLocal = useRoomQuery(rid);
 
-	const rolesToFetch = ['admin', 'moderator', 'owner'];
-	const rolesResult = useRoomRolesEndpoint(rid, rolesToFetch);
-	const roles = rolesResult.data ?? [];
+	// const rolesToFetch = ['admin'];
+	// const rolesResult = useRoomRolesEndpoint(rid, rolesToFetch);
+
+	const adminResult = useRoomRolesEndpoint(rid, ['admin']);
+	const ownerResult = useRoomRolesEndpoint(rid, ['owner']);
+	const leaderResult = useRoomRolesEndpoint(rid, ['leader']);
+
+	const rolesData = useMemo(() => {
+		const adminIds = adminResult.data?.map((user) => user._id) ?? [];
+		const ownerIds = ownerResult.data?.map((user) => user._id) ?? [];
+		const leaderIds = leaderResult.data?.map((user) => user._id) ?? [];
+
+		return [
+			{ role: 'admin', userIds: adminIds },
+			{ role: 'owner', userIds: ownerIds },
+			{ role: 'leader', userIds: leaderIds },
+		];
+	}, [adminResult.data, ownerResult.data, leaderResult.data]);
+
+	const roles = rolesData ?? [];
 
 	// TODO: the following effect is a workaround while we don't have a general and definitive solution for it
 	const router = useRouter();
@@ -97,7 +114,7 @@ const RoomProvider = ({ rid, children }: RoomProviderProps): ReactElement => {
 			isLoadingMoreMessages,
 			roles,
 		};
-	}, [hasMoreNextMessages, hasMorePreviousMessages, isLoadingMoreMessages, pseudoRoom, rid, subscriptionQuery.data, rolesResult.data]);
+	}, [hasMoreNextMessages, hasMorePreviousMessages, isLoadingMoreMessages, pseudoRoom, rid, subscriptionQuery.data, roles]);
 
 	const isSidepanelFeatureEnabled = useSidePanelNavigation();
 
@@ -176,7 +193,7 @@ const RoomProvider = ({ rid, children }: RoomProviderProps): ReactElement => {
 	if (!pseudoRoom) {
 		return resultFromLocal.isSuccess && !resultFromLocal.data ? <RoomNotFound /> : <RoomSkeleton />;
 	}
-
+	console.log(' room context value ', context);
 	return (
 		<RoomContext.Provider value={context}>
 			<RoomToolboxProvider>

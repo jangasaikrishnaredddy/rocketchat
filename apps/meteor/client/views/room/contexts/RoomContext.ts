@@ -14,16 +14,8 @@ type RoomContextValue = {
 	hasMoreNextMessages: boolean;
 	isLoadingMoreMessages: boolean;
 	roles: {
-		_id: string;
-		name?: string;
-		username?: string;
-		emails?: {
-			address: string;
-			verified?: boolean;
-		}[];
-		avatarETag?: string;
-		createdAt: string;
-		roles: string[];
+		role: string;
+		userIds: string[];
 	}[];
 };
 
@@ -47,6 +39,16 @@ export const useRoom = (): IRoom => {
 	}
 
 	return context.room;
+};
+
+export const useRoles = () => {
+	const context = useContext(RoomContext);
+
+	if (!context) {
+		throw new Error('use useRoles only inside opened rooms');
+	}
+
+	return context.roles;
 };
 
 export const useRoomSubscription = (): ISubscription | undefined => {

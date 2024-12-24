@@ -60,15 +60,9 @@ const RoomMembersItem = ({
 			<OptionColumn>{federated ? <Icon name='globe' size='x16' /> : <ReactiveUserStatus uid={_id} />}</OptionColumn>
 			<OptionContent data-qa={`MemberItem-${username}`}>
 				{nameOrUsername} {displayUsername && <OptionDescription>({displayUsername})</OptionDescription>}
-				{roles.length > 0 ? (
-					<Box fontScale='c2' color='hint'>
-						{roles.join(', ')}
-					</Box>
-				) : (
-					<Box fontScale='c2' color='hint'>
-						No roles assigned
-					</Box>
-				)}
+				<Box fontScale='c2' color='hint'>
+					{roles.length > 0 ? roles.join(', ') : 'no roles assigned'}
+				</Box>
 			</OptionContent>
 			<OptionMenu onClick={preventPropagation}>
 				{showButton ? (
