@@ -1,16 +1,15 @@
 import type { IRoom } from '@rocket.chat/core-typings';
-import type { ReactElement } from 'react';
+import { HeaderTagSkeleton } from '@rocket.chat/ui-client';
 import React from 'react';
 
 import ParentRoom from './ParentRoom';
-import { HeaderTagSkeleton } from '../../../components/Header';
 import { useRoomInfoEndpoint } from '../../../hooks/useRoomInfoEndpoint';
 
 type ParentRoomWithEndpointDataProps = {
 	rid: IRoom['_id'];
 };
 
-const ParentRoomWithEndpointData = ({ rid }: ParentRoomWithEndpointDataProps): ReactElement | null => {
+const ParentRoomWithEndpointData = ({ rid }: ParentRoomWithEndpointDataProps) => {
 	const { data, isLoading, isError } = useRoomInfoEndpoint(rid);
 
 	if (isLoading) {
