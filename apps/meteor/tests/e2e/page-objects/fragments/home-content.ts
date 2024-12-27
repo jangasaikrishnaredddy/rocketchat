@@ -421,4 +421,8 @@ export class HomeContent {
 	get btnClearSelection() {
 		return this.page.getByRole('button', { name: 'Clear selection' });
 	}
+
+	get btnOptions() {
+		return this.channelHeader.getByRole('button', { name: 'Options', exact: true });
+	}
 }

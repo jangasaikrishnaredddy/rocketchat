@@ -39,8 +39,20 @@ export class HomeOmnichannelContent extends HomeContent {
 		return this.page.locator('[name="msg"]');
 	}
 
+	get toolbarActions(): Locator {
+		return this.channelHeader.getByRole('toolbar', { name: 'Omnichannel Quick Actions', exact: true });
+	}
+
+	get primaryRoomActions(): Locator {
+		return this.channelHeader.getByRole('toolbar', { name: 'Primary Room actions', exact: true });
+	}
+
+	get btnEndConversation(): Locator {
+		return this.toolbarActions.getByRole('button', { name: 'End conversation', exact: true });
+	}
+
 	get btnForwardChat(): Locator {
-		return this.page.locator('[data-qa-id="ToolBoxAction-balloon-arrow-top-right"]');
+		return this.toolbarActions.getByRole('button', { name: 'Forward chat', exact: true });
 	}
 
 	get btnCloseChat(): Locator {
@@ -53,6 +65,26 @@ export class HomeOmnichannelContent extends HomeContent {
 
 	get infoContactEmail(): Locator {
 		return this.page.getByRole('dialog').locator('p[data-type="email"]');
+	}
+
+	get btnRoomInfo(): Locator {
+		return this.primaryRoomActions.getByRole('button', { name: 'Room Information', exact: true });
+	}
+
+	get btnSearchMessages(): Locator {
+		return this.primaryRoomActions.getByRole('button', { name: 'Search Messages', exact: true });
+	}
+
+	get btnFiles(): Locator {
+		return this.primaryRoomActions.getByRole('button', { name: 'Files', exact: true });
+	}
+
+	get btnCannedResponses(): Locator {
+		return this.primaryRoomActions.getByRole('button', { name: 'Canned Responses', exact: true });
+	}
+
+	get btnContactInformation(): Locator {
+		return this.primaryRoomActions.getByRole('button', { name: 'Contact Information', exact: true });
 	}
 
 	get infoContactName(): Locator {
