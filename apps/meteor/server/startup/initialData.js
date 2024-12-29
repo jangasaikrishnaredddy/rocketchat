@@ -3,8 +3,8 @@ import colors from 'colors/safe';
 import { Accounts } from 'meteor/accounts-base';
 import { Meteor } from 'meteor/meteor';
 
-import { RocketChatFile } from '../../app/file/server';
-import { FileUpload } from '../../app/file-upload/server';
+// import { RocketChatFile } from '../../app/file/server';
+// import { FileUpload } from '../../app/file-upload/server';
 import { addUserToDefaultChannels } from '../../app/lib/server/functions/addUserToDefaultChannels';
 import { checkUsernameAvailability } from '../../app/lib/server/functions/checkUsernameAvailability';
 import { notifyOnSettingChangedById } from '../../app/lib/server/lib/notifyListener';
@@ -145,20 +145,20 @@ Meteor.startup(async () => {
 
 			await addUserRolesAsync('rocket.cat', ['bot']);
 
-			const buffer = Buffer.from(await Assets.getBinaryAsync('avatars/rocketcat.png'));
+			// const buffer = Buffer.from(await Assets.getBinaryAsync('avatars/rocketcat.png'));
 
-			const rs = RocketChatFile.bufferToStream(buffer, 'utf8');
-			const fileStore = FileUpload.getStore('Avatars');
-			await fileStore.deleteByName('rocket.cat');
+			// const rs = RocketChatFile.bufferToStream(buffer, 'utf8');
+			// const fileStore = FileUpload.getStore('Avatars');
+			// await fileStore.deleteByName('rocket.cat');
 
-			const file = {
-				userId: 'rocket.cat',
-				type: 'image/png',
-				size: buffer.length,
-			};
+			// const file = {
+			// 	userId: 'rocket.cat',
+			// 	type: 'image/png',
+			// 	size: buffer.length,
+			// };
 
-			const upload = await fileStore.insert(file, rs);
-			await Users.setAvatarData('rocket.cat', 'local', upload.etag);
+			// const upload = await fileStore.insert(file, rs);
+			// await Users.setAvatarData('rocket.cat', 'local', upload.etag);
 		}
 	} catch (error) {
 		console.log(
