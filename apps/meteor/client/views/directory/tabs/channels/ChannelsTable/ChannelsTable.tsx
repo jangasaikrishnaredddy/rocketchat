@@ -82,7 +82,10 @@ const ChannelsTable = () => {
 
 	const getDirectoryData = useEndpoint('GET', '/v1/directory');
 	const query = useDirectoryQuery({ text, current, itemsPerPage }, [sortBy, sortDirection], 'channels');
-	const { data, isFetched, isLoading, isError, refetch } = useQuery(['getDirectoryData', query], () => getDirectoryData(query));
+	const { data, isFetched, isPending, isError, refetch } = useQuery({
+		queryKey: ['getDirectoryData', query],
+		queryFn: () => getDirectoryData(query),
+	});
 
 	const onClick = useMemo(
 		() => (name: IRoom['name'], type: IRoom['t']) => (e: KeyboardEvent | MouseEvent) => {
@@ -96,7 +99,7 @@ const ChannelsTable = () => {
 	return (
 		<>
 			<FilterByText placeholder={t('Search_Channels')} value={text} onChange={(event) => setText(event.target.value)} />
-			{isLoading && (
+			{isPending && (
 				<GenericTable>
 					<GenericTableHeader>{headers}</GenericTableHeader>
 					<GenericTableBody>

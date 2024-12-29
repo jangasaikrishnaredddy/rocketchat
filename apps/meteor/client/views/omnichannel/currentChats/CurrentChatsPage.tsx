@@ -3,7 +3,7 @@ import { Callout, Pagination } from '@rocket.chat/fuselage';
 import { useMutableCallback } from '@rocket.chat/fuselage-hooks';
 import type { GETLivechatRoomsParams } from '@rocket.chat/rest-typings';
 import { usePermission, useRouter } from '@rocket.chat/ui-contexts';
-import { hashQueryKey } from '@tanstack/react-query';
+import { hashKey } from '@tanstack/react-query';
 import moment from 'moment';
 import type { ComponentProps, ReactElement } from 'react';
 import { memo, useCallback, useMemo, useState } from 'react';
@@ -162,10 +162,10 @@ const CurrentChatsPage = ({ id, onRowClick }: { id?: string; onRowClick: (_id: s
 		[customFields, itemsPerPage, params, sortBy, sortDirection, current],
 	);
 
-	const { data, isLoading, isSuccess } = useCurrentChats(query);
+	const { data, isPending, isSuccess } = useCurrentChats(query);
 
-	const [defaultQuery] = useState(hashQueryKey([query]));
-	const queryHasChanged = defaultQuery !== hashQueryKey([query]);
+	const [defaultQuery] = useState(hashKey([query]));
+	const queryHasChanged = defaultQuery !== hashKey([query]);
 
 	const onFilter = useMutableCallback((params: DebouncedParams): void => {
 		setParams(params);
@@ -341,7 +341,7 @@ const CurrentChatsPage = ({ id, onRowClick }: { id?: string; onRowClick: (_id: s
 							linkText={t('Learn_more_about_current_chats')}
 						/>
 					)}
-					{isLoading && (
+					{isPending && (
 						<GenericTable>
 							<GenericTableHeader>{headers}</GenericTableHeader>
 							<GenericTableBody>

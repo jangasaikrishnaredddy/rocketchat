@@ -103,7 +103,7 @@ const Thread = ({ tmid }: ThreadProps) => {
 				>
 					<ContextualbarHeader expanded={expanded}>
 						<ContextualbarBack onClick={handleGoBack} />
-						{(mainMessageQueryResult.isLoading && <Skeleton width='100%' />) ||
+						{(mainMessageQueryResult.isPending && <Skeleton width='100%' />) ||
 							(mainMessageQueryResult.isSuccess && <ThreadTitle mainMessage={mainMessageQueryResult.data} />) ||
 							null}
 						<ContextualbarActions>
@@ -117,14 +117,14 @@ const Thread = ({ tmid }: ThreadProps) => {
 							<ContextualbarAction
 								name={following ? 'bell' : 'bell-off'}
 								title={following ? t('Following') : t('Not_Following')}
-								disabled={!mainMessageQueryResult.isSuccess || toggleFollowingMutation.isLoading}
+								disabled={!mainMessageQueryResult.isSuccess || toggleFollowingMutation.isPending}
 								onClick={handleToggleFollowing}
 							/>
 							<ContextualbarClose onClick={handleClose} />
 						</ContextualbarActions>
 					</ContextualbarHeader>
 
-					{(mainMessageQueryResult.isLoading && <ThreadSkeleton />) ||
+					{(mainMessageQueryResult.isPending && <ThreadSkeleton />) ||
 						(mainMessageQueryResult.isSuccess && (
 							<ChatProvider tmid={tmid}>
 								<ThreadChat mainMessage={mainMessageQueryResult.data} />
